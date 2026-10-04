@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Unit 5: Environment — Interactive Companion</title>
+<style>
+:root{
+  --bg:#f7f6f2; --card:#ffffff; --ink:#1f2a23; --sub:#55645a;
+  --accent:#3f7a52; --accent2:#c98a2c; --line:#dde3dc;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15201a; --card:#1d2a22; --ink:#eef2ee; --sub:#9db2a6;
+    --accent:#6fbf86; --accent2:#e3a94a; --line:#2c3b32;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15201a; --card:#1d2a22; --ink:#eef2ee; --sub:#9db2a6;
+  --accent:#6fbf86; --accent2:#e3a94a; --line:#2c3b32;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.5}
+header{padding:16px;text-align:center}
+h1{font-size:1.25rem;margin:0 0 4px}
+.sub{color:var(--sub);font-size:.85rem}
+nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:10px 12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}
+nav button{font-family:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer;font-size:.85rem}
+nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+main{max-width:780px;margin:0 auto;padding:14px 14px 60px}
+section{display:none}
+section.active{display:block}
+.score-bar{position:sticky;top:48px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:.9rem;z-index:4}
+.score-bar b{color:var(--accent);font-size:1.05rem}
+h2{font-size:1.08rem;color:var(--accent);border-bottom:2px solid var(--line);padding-bottom:4px;margin-top:26px}
+h3.sub-h{font-size:.95rem;margin:14px 0 6px;color:var(--ink)}
+.passage{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:.88rem;max-height:340px;overflow-y:auto}
+.passage p{margin:0 0 10px}
+.instr{font-size:.85rem;color:var(--sub);margin:4px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:12px 0}
+.flip{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;cursor:pointer;min-height:70px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:.85rem}
+.flip.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0}
+.item .q{font-size:.9rem;margin-bottom:8px}
+.item textarea,.item input[type=text]{width:100%;font-family:inherit;font-size:.85rem;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-bottom:8px}
+.item textarea{min-height:54px;resize:vertical}
+.ans{display:none;color:var(--sub);font-size:.85rem;margin:6px 0;padding:8px;background:var(--bg);border-radius:8px}
+.ans.show{display:block}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.row label{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--sub)}
+.toggle-btn{border:none;background:none;color:var(--accent);font-size:.8rem;cursor:pointer;text-decoration:underline;padding:0}
+.pts{font-size:.75rem;color:var(--accent2);font-weight:bold}
+.cue-cat{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:10px 14px;margin:10px 0}
+.cue-cat h3{margin:0 0 6px;font-size:.92rem;color:var(--accent)}
+.cue-cat ul{margin:0;padding-left:18px;font-size:.85rem}
+.writing{display:flex;align-items:center;gap:8px;margin-top:6px}
+.writing input{width:60px;padding:4px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.note{font-size:.78rem;color:var(--sub);font-style:italic}
+.wordbank{background:var(--card);border:1px dashed var(--accent);border-radius:8px;padding:10px 14px;font-size:.85rem;margin:8px 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wc{font-size:.75rem;color:var(--sub);text-align:right}
+</style>
+</head>
+<body>
+<header>
+  <h1>🌾 Unit 5: Environment — Preserving Rice Fields</h1>
+  <div class="sub">Mazaya English Programme — Interactive Companion</div>
+</header>
+<nav>
+  <button class="active" data-t="glos">📖 Glossary</button>
+  <button data-t="key">📝 Workbook Tasks</button>
+  <button data-t="cue">💬 Cue Phrases</button>
+</nav>
+<main>
+
+<section id="glos" class="active">
+  <p class="note">Click a card to reveal its meaning.</p>
+  <div class="grid" id="glosGrid"></div>
+</section>
+
+<section id="key">
+  <div class="score-bar">Your score: <b><span id="scoreNow">0</span> / <span id="scoreMax">58</span></b></div>
+
+  <h2>A. Before Reading</h2>
+  <div class="item">
+    <div class="q">1. What do you think rice fields provide for communities? Write two ideas.</div>
+    <textarea placeholder="Idea 1"></textarea>
+    <textarea placeholder="Idea 2"></textarea>
+  </div>
+
+  <h2>B. Reading Text</h2>
+  <p class="instr">Read the text, then answer Question 2 below.</p>
+  <div class="passage">
+  <p><b>Preserving Rice Fields for Future Generations</b></p>
+  <p>Rice fields hold a central position in global agriculture, providing sustenance, livelihoods, and cultural significance to millions of people around the world. Their existence is essential for food security, economic stability, and environmental sustainability in both rural and urban contexts.</p>
+  <p>First and foremost, rice fields serve as a basis of global food security, nourishing billions of people as a staple food source. In many regions, particularly across Asia, rice is a dietary staple, forming the foundation of daily meals and providing essential nutrients for human health. The cultivation of rice fields ensures a reliable food supply, helping to decrease hunger and malnutrition in places where rice is a dietary staple.</p>
+  <p>Furthermore, the presence of rice fields supports rural livelihoods and agricultural economies, particularly in developing countries where rice farming is a primary source of income. Smallholder farmers, often working family-owned plots, rely on rice cultivation for their income and economic well-being. Additionally, rice farming activities create employment opportunities along the agricultural value chain, from planting and harvesting to processing and marketing, thus contributing to rural employment and increased income.</p>
+  <p>Moreover, rice fields play a vital role in maintaining environmental sustainability and ecosystem health. Wetland rice cultivation provides important ecosystem services, including purifying water, mitigating floods, and providing habitat for wildlife. Rice fields are an important habitat for various species of birds, fish, and amphibians, contributing to biodiversity conservation and ecological resilience.</p>
+  <p>However, the number of rice fields has been decreasing over the past years. One of the primary causes of the decreasing number of rice fields in Indonesia is rapid urbanization leading to land conversion for infrastructure development and urban expansion. As cities expand and population densities increase, agricultural land is often converted into residential, commercial, and industrial areas, leading to the loss of prime rice-growing areas. Additionally, the conversion of rice fields into non-agricultural uses, such as tourism resorts and industrial estates, further reduces the available land for rice cultivation.</p>
+  <p>The decreasing number of rice fields in Indonesia has significant implications on food security and rural livelihoods. Rice is a staple food for the majority of Indonesians, and any decrease in rice production could lead to food shortages and price volatility, particularly affecting low-income households. Furthermore, the loss of rice fields threatens the livelihoods of millions of smallholder farmers who depend on rice cultivation for their income and livelihood.</p>
+  <p>In conclusion, rice fields play a critical role in food security, economic stability, and environmental sustainability. However, their number decreases year by year because of rapid urbanization and land conversion, which threatens food security and rural livelihoods. By prioritizing the preservation and revitalization of rice fields, Indonesia can secure its food security, support its rural livelihoods, and conserve its natural heritage for future generations.</p>
+  </div>
+  <div class="item" style="margin-top:12px">
+    <div class="q">2. What are the three main roles of rice fields mentioned by the writer?</div>
+    <textarea placeholder="Write your answer..."></textarea>
+    <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('show')">Show answer key</button>
+    <div class="ans">Food security (staple food source), supporting rural livelihoods/agricultural economies, and maintaining environmental sustainability/ecosystem health.</div>
+  </div>
+
+  <h2>C. Reading Comprehension</h2>
+  <div id="rcList"></div>
+
+  <h2>D. Facts and Opinions</h2>
+  <p class="instr">3. Find facts and opinions from the text. Write them in the table.</p>
+  <div class="two-col">
+    <div class="item"><b>Facts</b>
+      <textarea placeholder="Fact 1"></textarea><textarea placeholder="Fact 2"></textarea><textarea placeholder="Fact 3"></textarea></div>
+    <div class="item"><b>Opinions</b>
+      <textarea placeholder="Opinion 1"></textarea><textarea placeholder="Opinion 2"></textarea><textarea placeholder="Opinion 3"></textarea></div>
+  </div>
+  <button class="toggle-btn" onclick="this.nextElementSibling.classList.toggle('show')">Show sample answer</button>
+  <div class="ans">Facts: e.g. "Rice is a dietary staple across Asia"; "Rice fields provide habitat for birds, fish, and amphibians." Opinions: statements implying judgement, e.g. "rice fields play a critical role..."; "Indonesia can secure its food security..." — accept reasonable answers.</div>
+
+  <h2>E. Vocabulary</h2>
+  <h3 class="sub-h">1. Match the words with their meanings</h3>
+  <div id="vmList"></div>
+  <h3 class="sub-h">2. Practise saying these words aloud</h3>
+  <p class="instr">sustenance • sustainability • nourishing • dietary staple • livelihood • resilience • urbanisation • biodiversity • cultivation • heritage • shortages • volatility</p>
+  <h3 class="sub-h">3. Complete the sentences with words from the box</h3>
+  <div class="wordbank">biodiversity · cultivation · heritage · resilience · shortages · sustainability · urbanisation · volatility</div>
+  <div id="vcList"></div>
+
+  <h2>F. Discussion Texts</h2>
+  <p class="instr">A discussion text presents different viewpoints and arguments about an issue. It helps readers consider both supporting and contrasting points before reaching a conclusion. It typically begins with a statement of the issue, then presents supporting points and contrast points, and may end with recommendations.</p>
+  <p class="instr"><b>Purposes:</b> to provide information about a specific issue; to promote critical thinking by showing different sides; to inspire debate and help readers understand a topic more completely.</p>
+  <h3 class="sub-h">2. Label the paragraphs of "Preserving Rice Fields for Future Generations"</h3>
+  <p class="instr">(statement of issue / supporting point / contrast point / recommendation)</p>
+  <div id="stList"></div>
+
+  <h2>G. Language Features in Discussion Texts</h2>
+  <div id="lfList"></div>
+
+  <h2>H. Useful Language for Discussion Texts</h2>
+  <div id="ulList"></div>
+
+  <h2>I. Writing</h2>
+  <div class="item">
+    <div class="q">1. Choose one position and write three reasons for it:</div>
+    <label><input type="radio" name="pos"> Rice fields should be protected from urban expansion</label><br>
+    <label><input type="radio" name="pos"> Some conversion is necessary for development</label>
+    <textarea placeholder="Reason 1"></textarea>
+    <textarea placeholder="Reason 2"></textarea>
+    <textarea placeholder="Reason 3"></textarea>
+  </div>
+  <div class="item">
+    <div class="q">2. Write a discussion text of 150–180 words about preserving rice fields.</div>
+    <textarea id="essay" style="min-height:160px" placeholder="Write your discussion text here..." oninput="document.getElementById('wc').textContent=(this.value.trim()?this.value.trim().split(/\s+/).length:0)+' words'"></textarea>
+    <div class="wc" id="wc">0 words</div>
+    <div class="q" style="margin-top:10px">Rubric: Content &amp; argument (4) + Discussion text structure (3) + Grammar/language feature (3) = 10 pts</div>
+    <div class="writing">Writing score: <input type="number" id="writeScore" min="0" max="10" value="0"> / 10</div>
+  </div>
+
+  <h2>J. Speaking Activity</h2>
+  <p class="instr">1. Work with a partner. Present your recommendation for preserving rice fields in one minute. Your partner should ask one follow-up question.</p>
+  <p class="instr">Useful expressions: In my opinion, … | One important reason is … | However, … | Therefore, I recommend … | What do you think about …?</p>
+  <h3 class="sub-h">2. Reflection — I can…</h3>
+  <div class="item">
+    <label><input type="checkbox"> I can identify the main idea of a paragraph.</label><br>
+    <label><input type="checkbox"> I can distinguish facts from opinions.</label><br>
+    <label><input type="checkbox"> I can explain the structure of a discussion text.</label><br>
+    <label><input type="checkbox"> I can use connectives to link ideas.</label><br>
+    <label><input type="checkbox"> I can write a recommendation about an environmental issue.</label>
+  </div>
+
+  <h2>Word Bank</h2>
+  <div class="wordbank">food security · livelihood · biodiversity · cultivation · urbanisation · land conversion · resilience · heritage · recommendation</div>
+</section>
+
+<section id="cue">
+  <p class="note">Use these phrases to help with writing &amp; presenting.</p>
+  <div class="cue-cat"><h3>🗣️ Giving opinions</h3><ul>
+    <li>In my opinion, …</li><li>I believe that …</li><li>Many people believe that …</li></ul></div>
+  <div class="cue-cat"><h3>💡 Giving reasons</h3><ul>
+    <li>One important reason is …</li><li>This is because …</li><li>For example, …</li></ul></div>
+  <div class="cue-cat"><h3>⚖️ Contrast / another viewpoint</h3><ul>
+    <li>However, …</li><li>Although … , …</li><li>On the other hand, …</li></ul></div>
+  <div class="cue-cat"><h3>✅ Recommendation</h3><ul>
+    <li>Therefore, I recommend …</li><li>Governments/communities should …</li><li>It is important to …</li></ul></div>
+  <div class="cue-cat"><h3>🔚 Conclusion</h3><ul>
+    <li>In conclusion, …</li><li>Overall, …</li></ul></div>
+  <div class="cue-cat"><h3>🔗 Connectives</h3><ul>
+    <li>first and foremost, furthermore, moreover, however, additionally, in conclusion</li></ul></div>
+  <div class="cue-cat"><h3>🧠 Modal &amp; thinking verbs</h3><ul>
+    <li>Modal: can, could, may, might, should, must</li>
+    <li>Thinking verbs: believe, think, consider, argue, suggest</li>
+  </ul></div>
+  <div class="cue-cat"><h3>🔄 Passive voice pattern</h3><ul>
+    <li>is/are + past participle — e.g. "Agricultural land is converted into housing."</li></ul></div>
+</section>
+
+</main>
+<script>
+const glossary=[
+["sustenance","Food or drink that provides strength"],
+["sustainability","The ability to continue without harming the future"],
+["nourishing","Providing substances needed for health and growth"],
+["dietary staple","A food eaten regularly by many people"],
+["livelihood","A way of earning money to live"],
+["resilience","The ability to recover after difficulty"],
+["urbanisation","The process of making land or places more urban"],
+["biodiversity","The variety of living things in an area"],
+["cultivation","The act of growing crops or plants"],
+["heritage","Something valued, passed down from the past"],
+["volatility","Tendency to change quickly / unpredictably"],
+["shortages","A lack or insufficient amount of something"],
+["food security","Reliable access to enough safe, nutritious food"],
+["land conversion","Changing land use (e.g. farmland → buildings)"],
+["recommendation","A suggestion about the best action to take"]
+];
+const g=document.getElementById('glosGrid');
+glossary.forEach(([w,d])=>{
+  const c=document.createElement('div');
+  c.className='flip'; c.innerHTML='<b>'+w+'</b>';
+  c.onclick=()=>{ c.classList.toggle('on'); c.innerHTML = c.classList.contains('on') ? d : '<b>'+w+'</b>'; };
+  g.appendChild(c);
+});
+
+let total=0,max=0;
+function updateScore(){
+  document.getElementById('scoreNow').textContent = total + (parseInt(document.getElementById('writeScore').value)||0);
+}
+document.getElementById('writeScore').addEventListener('input',updateScore);
+
+function addItem(container,q,ans,pts){
+  max+=pts;
+  document.getElementById('scoreMax').textContent=max;
+  const d=document.createElement('div'); d.className='item';
+  d.innerHTML=`<div class="q">${q}</div>
+    <textarea placeholder="Write your answer..."></textarea>
+    <div class="row"><button class="toggle-btn">Show answer key</button>
+    <label><input type="checkbox" class="chk">My answer was correct</label>
+    <span class="pts">${pts} pt</span></div>
+    <div class="ans">${ans}</div>`;
+  d.querySelector('.toggle-btn').onclick=()=>d.querySelector('.ans').classList.toggle('show');
+  d.querySelector('.chk').addEventListener('change',e=>{ total += e.target.checked?pts:-pts; updateScore(); });
+  container.appendChild(d);
+}
+
+const rc=[
+["a. What are potential solutions to preserve rice fields?","Preserve agricultural land, regulate conversion, support farmers, revitalise abandoned fields, and promote sustainable farming."],
+["b. What is the relationship between rice fields and rural livelihoods?","Rice farming provides income, employment, and economic stability for smallholder farmers and rural communities."],
+["c. How do rice fields contribute to biodiversity conservation?","Rice fields provide habitats for birds, fish, and amphibians and support ecosystem services."],
+["d. What is the primary role of rice fields in global agriculture?","They provide a major staple food source and support global food security."],
+["e. What is the significance of prioritising preservation?","It can protect food security, rural livelihoods, economic stability, and natural heritage."],
+["f. What is one cause of decreasing rice fields in Indonesia?","Rapid urbanisation and conversion of agricultural land for infrastructure and urban expansion."],
+["g. How do rice fields contribute to food security?","They provide a reliable staple food supply and help reduce hunger and malnutrition."],
+["h. How does loss of rice fields impact food security?","It may cause lower production, shortages, price volatility, and greater pressure on low-income households."],
+["i. Why are rice fields important for environmental sustainability?","They purify water, mitigate floods, provide wildlife habitat, and support ecological resilience."]
+];
+const rcEl=document.getElementById('rcList'); rc.forEach(([q,a])=>addItem(rcEl,q,a,2));
+
+const vm=[["sustenance","food/drink providing strength"],["sustainability","continue without harming future"],["nourishing","providing health substances"],["dietary staple","food eaten regularly"],["livelihood","way of earning money"],["resilience","recover after difficulty"],["urbanisation","making land more urban"],["biodiversity","variety of living things"]];
+const vmEl=document.getElementById('vmList'); vm.forEach(([w,a])=>addItem(vmEl,"Match: "+w,a,1));
+
+const vc=[["a. Efforts to promote __________ can help ecosystems recover their health.","biodiversity"],
+["b. Rice __________ provides food and work for many communities.","cultivation"],
+["c. A strong community shows __________ when it faces floods or drought.","resilience"],
+["d. Rapid __________ can reduce the amount of agricultural land.","urbanisation"],
+["e. Food __________ may happen when rice production falls.","shortages"],
+["f. Protecting historic farms preserves cultural __________.","heritage"],
+["g. Economic __________ can make food prices rise and fall quickly.","volatility"]];
+const vcEl=document.getElementById('vcList'); vc.forEach(([q,a])=>addItem(vcEl,q,a,1));
+
+const st=[["Paragraph 1","Statement of issue"],["Paragraph 2","Supporting point (food security)"],["Paragraph 3","Supporting point (rural livelihoods)"],["Paragraph 4","Supporting point (environmental sustainability)"],["Paragraph 5–6","Contrast point (urbanisation & its impact)"],["Paragraph 7","Recommendation / conclusion"]];
+const stEl=document.getElementById('stList'); st.forEach(([q,a])=>addItem(stEl,q,a,1));
+
+const lf=[
+["1. Find one example of a connective in the article. Explain what relationship it shows.","e.g. 'Furthermore' — adds a supporting point to the previous idea."],
+["2. Rewrite the sentence using a modal verb: 'Indonesia preserves rice fields for future generations.'","Indonesia should/must preserve rice fields for future generations."],
+["3. Underline the passive voice in this sentence: 'Agricultural land is often converted into residential, commercial, and industrial areas.'","'is ... converted' — passive voice (is/are + past participle)."],
+["4. Write one sentence using a thinking verb about rice fields.","e.g. 'Many people believe that rice fields are important for food security.'"]
+];
+const lfEl=document.getElementById('lfList'); lf.forEach(([q,a])=>addItem(lfEl,q,a,2));
+
+const ul=[
+["1. Choose the best connective: furthermore / however / in conclusion. Rice fields provide habitats for wildlife. __________, they help purify water.","Furthermore"],
+["2. Complete with a modal verb: Local governments __________ protect rice fields from uncontrolled land conversion.","should / must / can"],
+["3. Change to passive: 'Urban developers convert agricultural land into housing.'","Agricultural land is converted into housing by urban developers."],
+["4. Rewrite using a thinking verb: 'Rice fields are important for food security.'","Many people believe that rice fields are important for food security."],
+["5. Add an adverb of manner: 'The community should consider the effects of land conversion.'","The community should carefully/seriously consider the effects of land conversion."],
+["6. Join using although/however: 'Urban expansion creates jobs. It can reduce rice-growing areas.'","Although urban expansion creates jobs, it can reduce rice-growing areas."]
+];
+const ulEl=document.getElementById('ulList'); ul.forEach(([q,a])=>addItem(ulEl,q,a,2));
+
+document.querySelectorAll('nav button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('section').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.getElementById(b.dataset.t).classList.add('active');
+  };
+});
+</script>
+</body>
+</html>
